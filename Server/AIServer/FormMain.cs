@@ -1,4 +1,5 @@
 ﻿using AIShared;
+using AIServer.AI;
 using Newtonsoft.Json;
 using System;
 using System.IO;
@@ -7,6 +8,7 @@ using System.Windows.Forms;
 
 namespace AIServer {
     public partial class FormMain : Form {
+        private static AI_Logic _aiLogic = new AI_Logic();
         private WebServer _ws;
 
         public FormMain() {
@@ -53,14 +55,9 @@ namespace AIServer {
 
         private static string HandleInputRequest(string json, HttpListenerRequest request) {
             var inputRequest = JsonConvert.DeserializeObject<AI_InputRequest>(json);
-            
+
             var evaluationResponse = new AI_InputResponse {
-                Output = new AI_Output {
-                    Steering = 0,
-                    Acceleration = 0.3f,
-                    Footbrake = 0,
-                    Handbrake = 0
-                }
+                Output = _aiLogic.RunAI(inputRequest)            
             };
 
             var responseJson = JsonConvert.SerializeObject(evaluationResponse);
@@ -72,11 +69,11 @@ namespace AIServer {
         {
             var evaluationRequest = JsonConvert.DeserializeObject<AI_EvaluationRequest>(json);
 
+            var _aiTrainer = new AI_Trainer(evaluationRequest);
+
             var model = evaluationRequest.CurrentModel;
 
-            var evaluationResponse = new AI_EvaluationResponse {
-                Model = model
-            };
+            var evaluationResponse = _aiTrainer.Execute();
 
             var responseJson = JsonConvert.SerializeObject(evaluationResponse);
 
