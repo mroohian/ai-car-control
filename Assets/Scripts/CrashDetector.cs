@@ -21,6 +21,11 @@ public class CrashDetector : MonoBehaviour {
 	
     void OnCollisionEnter (Collision other)
     {
+        if (_aiCarControl == null || _carController == null)
+        {
+            return;
+        }
+
         // Break and disable AI control
         _aiCarControl.enabled = false;
         _carController.Move(0, 0, 0, 0);
