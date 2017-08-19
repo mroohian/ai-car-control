@@ -8,7 +8,7 @@ namespace AIServer.AI {
             this.evaluationRequest = evaluationRequest;
         }
 
-        internal object Execute() {
+        internal AI_EvaluationResponse Execute() {
             return new AI_EvaluationResponse {
                 Model = evaluationRequest.CurrentModel
             };
