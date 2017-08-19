@@ -21,9 +21,14 @@ public class FollowCar : MonoBehaviour {
 
     // Update is called once per frame
     void Update() {
-         Vector3 currentPos = _carPosition.transform.position;
-       
-         float currentHeight = this.transform.position.y;
+        Vector3 currentPos = _carPosition.transform.position;
+        var carRotation = _carPosition.rotation.eulerAngles.y * Mathf.PI / 180.0f;
+
+        var distanceX = Mathf.Sin(carRotation) * Distance;
+        var distanceZ = Mathf.Cos(carRotation) * Distance;
+
+
+        float currentHeight = this.transform.position.y;
  
          //wantedHeight should be the height of the car's position plus some distance
          float wantedHeight = _carPosition.transform.position.y + Height;
@@ -33,7 +38,7 @@ public class FollowCar : MonoBehaviour {
        
          //add a distance between the car's position and the camera's desired position, in the x coordinate because
          //of how the x/z axes on the cars are reversed
-         Vector3 wantedPos = new Vector3(currentPos.x,currentHeight,currentPos.z - Distance);
+         Vector3 wantedPos = new Vector3(currentPos.x - distanceX, currentHeight,currentPos.z - distanceZ);
                
          //finally, set the camera's position to its desired position
          this.transform.position = wantedPos;
