@@ -54,9 +54,7 @@ namespace AIServer
 
             var _aiTrainer = new AI_Trainer(evaluationRequest);
 
-            var model = evaluationRequest.CurrentModel;
-
-            var evaluationResponse = _aiTrainer.Execute();
+            var evaluationResponse = _aiTrainer.Execute(_aiLogic);
 
             var responseJson = JsonConvert.SerializeObject(evaluationResponse);
 

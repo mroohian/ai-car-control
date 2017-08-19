@@ -48,6 +48,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="AI\AIShared_Extensions.cs" />
     <Compile Include="AI\Logic.cs" />
     <Compile Include="AI\Trainer.cs" />
     <Compile Include="FormExtensions.cs" />
@@ -87,6 +88,10 @@
     </Compile>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\AICore\AICore.csproj">
+      <Project>{ba070e95-0a6a-416e-8951-6e631c47de82}</Project>
+      <Name>AICore</Name>
+    </ProjectReference>
     <ProjectReference Include="..\AI\AIShared.csproj">
       <Project>{7f0a8929-3d7b-48f6-bdab-f7de303cf845}</Project>
       <Name>AIShared</Name>

@@ -42,7 +42,6 @@
     <Compile Include="AI_Input.cs" />
     <Compile Include="AI_InputRequest.cs" />
     <Compile Include="AI_InputResponse.cs" />
-    <Compile Include="AI_Model.cs" />
     <Compile Include="AI_Output.cs" />
     <Compile Include="AI_EvaluationRequest.cs" />
     <Compile Include="AI_EvaluationResponse.cs" />

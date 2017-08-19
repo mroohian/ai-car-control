@@ -7,41 +7,17 @@ using System;
 
 public static class AI_Logic {
     private static float _startTime;
-    private static AI_Model model;
     private static List<AI_Evaluation> evaluationResults;
 
     public static void Start() {
-        var initialResponse = new AI_EvaluationResponse {
-            /* Initial parameters are all zeros. */
-            Model = new AI_Model {
-                Params = new List<float> {
-                    0,0,0,0,
-                    0,0,0,0,
-                    0,0,0,0,
-                    0,0,0,0,
-                    0,0,0,0
-                } 
-            }
-        };
-
         evaluationResults = new List<AI_Evaluation>();
-
-        // Create initial model
-        UpdateModel(initialResponse);
 
         _startTime = 0.0f;
     }
 
-    public static void Restart(AI_Model newModel) {
-        model = newModel;
-
+    public static void Restart() {
         evaluationResults = new List<AI_Evaluation>();
         _startTime = 0.0f;
-    }
-
-    private static void UpdateModel(AI_EvaluationResponse response) {
-        // Create a new AI model
-        model = response.Model;
     }
     
     public static void UpdateModelJson(byte[] bytes) {
@@ -52,8 +28,8 @@ public static class AI_Logic {
 
             response = JsonUtility.FromJson<AI_EvaluationResponse>(json);
 
-            if (response.Model == null || !ValidModel(response.Model)) {
-                throw new System.Exception();
+            if (response == null || response.Success != true) {
+                throw new Exception();
             }
         } catch {
             Debug.logger.LogWarning("AI_Logic [RunEvaluation]", "Cannot parse server response.");
@@ -63,22 +39,13 @@ public static class AI_Logic {
         Debug.logger.Log("Updating model...");
 
         // Update model
-        Restart(response.Model);
-    }
-
-    private static bool ValidModel(AI_Model model) {
-        if (model.Params == null || model.Params.Count != 20) {
-            return false;
-        }
-
-        return true;
+        Restart();
     }
 
     private static byte[] GetEvaluationRequestBody(float survivalTime) {
         var results = new AI_EvaluationRequest {
             SurvivalTime = survivalTime,
-            EvaluationResults = evaluationResults,
-            CurrentModel = model
+            EvaluationResults = evaluationResults
         };
 
         var json = JsonUtility.ToJson(results);
