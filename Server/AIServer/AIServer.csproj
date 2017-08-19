@@ -50,6 +50,7 @@
   <ItemGroup>
     <Compile Include="AI\Logic.cs" />
     <Compile Include="AI\Trainer.cs" />
+    <Compile Include="FormExtensions.cs" />
     <Compile Include="FormMain.cs">
       <SubType>Form</SubType>
     </Compile>
@@ -58,6 +59,7 @@
     </Compile>
     <Compile Include="Program.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+    <Compile Include="SimulationServer.cs" />
     <Compile Include="WebServer.cs" />
     <EmbeddedResource Include="FormMain.resx">
       <DependentUpon>FormMain.cs</DependentUpon>

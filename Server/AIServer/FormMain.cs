@@ -1,24 +1,22 @@
 ﻿using AIShared;
 using AIServer.AI;
-using Newtonsoft.Json;
 using System;
-using System.IO;
-using System.Net;
 using System.Windows.Forms;
 
-namespace AIServer {
-    public partial class FormMain : Form {
-        private static AI_Logic _aiLogic = new AI_Logic();
+namespace AIServer
+{
+    public partial class FormMain : Form {        
         private WebServer _ws;
 
         public FormMain() {
             InitializeComponent();
+            SimulationServer.InputUpdateEvent += this.FormMain_InputUpdateEvent;
         }
 
         private void buttonStart_Click(object sender, EventArgs e) {
             buttonStop_Click(sender, e);
 
-             _ws = new WebServer(HandleRequest, "http://localhost:8888/handleInput/", "http://localhost:8888/sendEvaluation/");
+            _ws = new WebServer(SimulationServer.HandleRequest, "http://localhost:8888/handleInput/", "http://localhost:8888/sendEvaluation/");
 
             _ws.Run();
 
@@ -36,48 +34,18 @@ namespace AIServer {
             buttonStart.Enabled = true;
             buttonStop.Enabled = false;
         }
- 
-        public static string HandleRequest(HttpListenerRequest request) {
-            var path = request.Url.AbsolutePath;
 
-            var json = new StreamReader(request.InputStream).ReadToEnd();
-
-            if (path.Equals("/handleInput/")) {
-                return HandleInputRequest(json, request);
-            }
-
-            if (path.Equals("/sendEvaluation/")) {
-                return HandleEvaluationRequest(json, request);
-            }
-
-            return "{ \"Error\": \"Unsupported endpoint\" }";
-        }
-
-        private static string HandleInputRequest(string json, HttpListenerRequest request) {
-            var inputRequest = JsonConvert.DeserializeObject<AI_InputRequest>(json);
-
-            var evaluationResponse = new AI_InputResponse {
-                Output = _aiLogic.RunAI(inputRequest)            
-            };
-
-            var responseJson = JsonConvert.SerializeObject(evaluationResponse);
-
-            return responseJson;   
-        }
-
-        public static string HandleEvaluationRequest(string json, HttpListenerRequest request)
+        private void FormMain_InputUpdateEvent(AI_InputRequest inputRequest)
         {
-            var evaluationRequest = JsonConvert.DeserializeObject<AI_EvaluationRequest>(json);
-
-            var _aiTrainer = new AI_Trainer(evaluationRequest);
-
-            var model = evaluationRequest.CurrentModel;
-
-            var evaluationResponse = _aiTrainer.Execute();
-
-            var responseJson = JsonConvert.SerializeObject(evaluationResponse);
-
-            return responseJson;    
+            this.InvokeIfRequired(() => {
+                textBoxSensor1.Text = inputRequest.Input.sensor1.ToString();
+                textBoxSensor2.Text = inputRequest.Input.sensor2.ToString();
+                textBoxSensor3.Text = inputRequest.Input.sensor3.ToString();
+                textBoxSensor4.Text = inputRequest.Input.sensor4.ToString();
+                textBoxSensor5.Text = inputRequest.Input.sensor5.ToString();
+                textBoxSensor6.Text = inputRequest.Input.sensor6.ToString();
+                textBoxSensor7.Text = inputRequest.Input.sensor7.ToString();
+            });
         }
     }
 }
