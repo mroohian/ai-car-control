@@ -20,7 +20,8 @@ namespace AIServer.AI
                 Steering = (float)values[0],
                 Acceleration = (float)values[1],
                 Footbrake = (float)values[2],
-                Handbrake = (float)values[3]
+                /* Handbrake output deactivated because of its severe effect. */
+                Handbrake = 0
             };
         }
     }

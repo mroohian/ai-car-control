@@ -9,7 +9,8 @@ namespace AIServer.AI
 
         public AI_Logic()
         {
-            var layers = new[] { 7, 4 };
+            /* Handbrake output deactivated because of its severe effect. */
+            var layers = new[] { 7, 3 };
 
             _neuralNetwork = new NeuralNetwork(layers);
         }
