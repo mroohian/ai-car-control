@@ -17,6 +17,10 @@ namespace AIServer
         public static event InputUpdateDelegate InputUpdateEvent;
         public static event OutputUpdateDelegate OutputUpdateEvent;
 
+        public static void ResetLogic() {
+            _aiLogic = new AI_Logic();
+        }
+
         public static string HandleRequest(HttpListenerRequest request)
         {
             var path = request.Url.AbsolutePath;

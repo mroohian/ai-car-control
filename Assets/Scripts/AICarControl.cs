@@ -20,7 +20,7 @@ public class AICarControl : MonoBehaviour {
 	}
 
     AI_Input GetSensorValues() {
-        SteeringSensor = (_carController.CurrentSteerAngle + 1f) / 2f;
+        SteeringSensor = (_carController.CurrentSteerAngle / _carController.MaxSteerAngle + 1f) / 2f;
         SpeedSensor = _carController.CurrentSpeed / _carController.MaxSpeed;
         AccelSensor = _carController.AccelInput;
         BrakeSensor = _carController.BrakeInput;

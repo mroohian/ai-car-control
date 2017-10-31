@@ -1,5 +1,4 @@
 ﻿using AIShared;
-using AIServer.AI;
 using System;
 using System.Windows.Forms;
 
@@ -16,6 +15,8 @@ namespace AIServer
 
         private void buttonStart_Click(object sender, EventArgs e) {
             buttonStop_Click(sender, e);
+
+            SimulationServer.ResetLogic();
 
             _ws = new WebServer(SimulationServer.HandleRequest, "http://localhost:8888/handleInput/", "http://localhost:8888/sendEvaluation/");
 
