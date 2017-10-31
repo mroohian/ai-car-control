@@ -6,18 +6,10 @@ using UnityEngine.Networking;
 using System;
 
 public static class AI_Logic {
-    private static float _startTime;
     private static List<AI_Evaluation> evaluationResults;
-
-    public static void Start() {
-        evaluationResults = new List<AI_Evaluation>();
-
-        _startTime = 0.0f;
-    }
 
     public static void Restart() {
         evaluationResults = new List<AI_Evaluation>();
-        _startTime = 0.0f;
     }
     
     public static void UpdateModelJson(byte[] bytes) {
@@ -42,9 +34,11 @@ public static class AI_Logic {
         Restart();
     }
 
-    private static byte[] GetEvaluationRequestBody(float survivalTime) {
+    private static byte[] GetEvaluationRequestBody(float traveledDistance, float furthestDistance, float survivalTime) {
         var results = new AI_EvaluationRequest {
             SurvivalTime = survivalTime,
+            TraveledDistance = traveledDistance,
+            FurthestDistance = furthestDistance,
             EvaluationResults = evaluationResults
         };
 
@@ -53,13 +47,11 @@ public static class AI_Logic {
         return System.Text.Encoding.UTF8.GetBytes(json);
     }   
 
-    public static IEnumerator RunEvaluationCoroutine(System.Action resetCallBack) {
-        var survivalTime = Time.time - _startTime;
-
+    public static IEnumerator RunEvaluationCoroutine(float survivalTime, float traveledDistance, float furthestDistance, Action resetCallBack) {
         Debug.logger.Log("Crashed. Processing results... survival time: " + survivalTime);
 
         // Process the results and setup a new test                        
-        UploadHandler uploader = new UploadHandlerRaw(AI_Logic.GetEvaluationRequestBody(survivalTime));
+        UploadHandler uploader = new UploadHandlerRaw(GetEvaluationRequestBody(traveledDistance, furthestDistance, survivalTime));
         uploader.contentType = "application/json";
         var downloader = new DownloadHandlerBuffer();
         var wr = new UnityWebRequest("http://localhost:8888/sendEvaluation/", "POST", downloader, uploader);
@@ -115,7 +107,7 @@ public static class AI_Logic {
 
     public static IEnumerator RunAICoroutine(float time, float deltaTime, AI_Input input, System.Action<AI_Output> callBack) {
         // Process the results and setup a new test                        
-        UploadHandler uploader = new UploadHandlerRaw(AI_Logic.GetRunAIRequestBody(time, deltaTime, input));
+        UploadHandler uploader = new UploadHandlerRaw(GetRunAIRequestBody(time, deltaTime, input));
         uploader.contentType = "application/json";
         var downloader = new DownloadHandlerBuffer();
         var wr = new UnityWebRequest("http://localhost:8888/handleInput/", "POST", downloader, uploader);

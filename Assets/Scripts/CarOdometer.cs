@@ -1,9 +1,7 @@
-﻿using System;
-using System.Collections;
-using System.Collections.Generic;
-using UnityEngine;
+﻿using UnityEngine;
 
 public class CarOdometer : MonoBehaviour {
+    private static float _startTime;
     private Vector3 _startPosition;
     private Vector3 _lastPosition;
 
@@ -13,8 +11,15 @@ public class CarOdometer : MonoBehaviour {
 
     public float FarthestDistance = 0.0f;
 
+    public float SurvivalTime {
+        get {
+            return Time.timeSinceLevelLoad - _startTime;
+        }
+    }
+
     // Use this for initialization
     void Start () {
+        _startTime = 0.0f;
         _startPosition = _lastPosition = Car.transform.position;
 	}
 	

@@ -9,10 +9,13 @@ namespace AIServer
     public static class SimulationServer
     {
         private static AI_Logic _aiLogic = new AI_Logic();
+        
 
         // Events
         public delegate void InputUpdateDelegate(AI_InputRequest inputRequest);
+        public delegate void OutputUpdateDelegate(AI_Output output);
         public static event InputUpdateDelegate InputUpdateEvent;
+        public static event OutputUpdateDelegate OutputUpdateEvent;
 
         public static string HandleRequest(HttpListenerRequest request)
         {
@@ -42,6 +45,8 @@ namespace AIServer
             var evaluationResponse = new AI_InputResponse {
                 Output = _aiLogic.RunAI(inputRequest)
             };
+
+            OutputUpdateEvent?.Invoke(evaluationResponse.Output);
 
             var responseJson = JsonConvert.SerializeObject(evaluationResponse);
 

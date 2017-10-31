@@ -3,7 +3,6 @@ using UnityEngine;
 
 public class InfoPanelUpdator : MonoBehaviour {
     private CarOdometer _odometer;
-    private float _startTime;
     public AICarControl Car;
     public Text TimeText;
     public Text DistanceText;
@@ -18,14 +17,12 @@ public class InfoPanelUpdator : MonoBehaviour {
 
     // Use this for initialization
     void Start () {
-        _startTime = Time.time;
-
         _odometer = Car.GetComponent<CarOdometer>();
     }
 	
 	// Update is called once per frame
 	void Update () {
-		TimeText.text = string.Format("Time: {0:F1}s", Time.time - _startTime);
+		TimeText.text = string.Format("Time: {0:F1}s", _odometer.SurvivalTime);
         DistanceText.text = string.Format("Distance: {0:F1}m", _odometer.Distance);
 
         Sensors1Text.text = string.Format("S1 (L): {0:F2}", Car.SensorLeft.Value);

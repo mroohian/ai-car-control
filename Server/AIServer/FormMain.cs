@@ -11,6 +11,7 @@ namespace AIServer
         public FormMain() {
             InitializeComponent();
             SimulationServer.InputUpdateEvent += this.FormMain_InputUpdateEvent;
+            SimulationServer.OutputUpdateEvent += this.FormMain_OutputUpdateEvent;
         }
 
         private void buttonStart_Click(object sender, EventArgs e) {
@@ -45,6 +46,16 @@ namespace AIServer
                 textBoxSensor5.Text = inputRequest.Input.sensor5.ToString();
                 textBoxSensor6.Text = inputRequest.Input.sensor6.ToString();
                 textBoxSensor7.Text = inputRequest.Input.sensor7.ToString();
+            });
+        }
+
+
+        private void FormMain_OutputUpdateEvent(AI_Output output) {
+            this.InvokeIfRequired(() => {
+                textBoxAcceleration.Text = output.Acceleration.ToString();
+                textBoxSteering.Text = output.Steering.ToString();
+                textBoxFootbrake.Text = output.Footbrake.ToString();
+                textBoxHandbrake.Text = output.Handbrake.ToString();
             });
         }
     }
